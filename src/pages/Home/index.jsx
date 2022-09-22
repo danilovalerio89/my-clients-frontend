@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MyClients from "../../components/MyClients";
+import MyClients from "../../components/MyClient";
 import {
   MainStyled,
   DivStyled,
@@ -12,10 +12,13 @@ import { useUser } from "../../providers/user";
 import { myClientsAPI } from "../../services/api";
 import { HiUser, HiUsers, HiUserAdd, HiLogout } from "react-icons/hi";
 import { useHistory } from "react-router-dom";
+import Client from "../../components/Client";
 
 function Home() {
   const history = useHistory();
   const [clients, setClients] = useState([]);
+  const [myClients, setMyClients] = useState(true);
+  const [editClient, setEditClient] = useState(false);
   const { user, setUser } = useUser();
 
   useEffect(() => {
@@ -24,24 +27,31 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    async function getClients() {
-      if (user.token) {
-        await myClientsAPI
-          .get("/clients", {
-            headers: {
-              "Authorization": `Token ${user.token}`,
-            },
-          })
-          .then((response) => setClients(response.data))
-          .catch((err) => console.log(err));
-      }
-    }
     getClients();
   }, [user]);
+
+  async function getClients() {
+    if (user.token) {
+      await myClientsAPI
+        .get("/clients", {
+          headers: {
+            "Authorization": `Token ${user.token}`,
+          },
+        })
+        .then((response) => setClients(response.data))
+        .catch((err) => console.log(err));
+    }
+  }
 
   function logout() {
     localStorage.clear();
     history.push("/");
+  }
+
+  function attClients() {
+    setEditClient(false);
+    setMyClients(true);
+    getClients();
   }
 
   return (
@@ -51,12 +61,12 @@ function Home() {
           <HiUser size={60}></HiUser>
         </DivImg>
         <NavStyled>
-          <ButtonNav>
+          <ButtonNav onClick={() => attClients()}>
             <HiUsers size={15} />
             Meus Clientes
           </ButtonNav>
 
-          <ButtonNav>
+          <ButtonNav onClick={() => setMyClients(false)}>
             <HiUserAdd size={15} />
             Adicionar
           </ButtonNav>
@@ -67,20 +77,26 @@ function Home() {
         </NavStyled>
       </DivStyled>
 
-      <SectionWrapper>
-        {clients.length > 0 ? (
-          clients.map((client) => (
-            <MyClients
-              key={client.id}
-              name={client.name}
-              phone={client.phone}
-              email={client.email}
-            />
-          ))
-        ) : (
-          <h1>Não tem cliente</h1>
-        )}
-      </SectionWrapper>
+      {myClients ? (
+        <SectionWrapper>
+          {clients.length > 0 ? (
+            clients.map((client) => (
+              <MyClients
+                key={client.id}
+                name={client.name}
+                phone={client.phone}
+                email={client.email}
+                id_client={client.id}
+                attClients={attClients}
+              />
+            ))
+          ) : (
+            <h1>Não tem cliente</h1>
+          )}
+        </SectionWrapper>
+      ) : (
+        <Client attClients={attClients} />
+      )}
     </MainStyled>
   );
 }

@@ -39,6 +39,7 @@ export const SectionWrapper = styled.section`
   align-items: center;
   flex-direction: column;
   margin: 25px auto;
+  background-color: var(--bck-grd);
 `;
 
 export const ButtonNav = styled.button`
