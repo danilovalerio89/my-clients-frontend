@@ -5,7 +5,8 @@ export default createGlobalStyle`
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Lato', sans-serif;;
+        font-family: 'Lato', sans-serif;
+        
     }
 :root{
        
@@ -34,6 +35,8 @@ export default createGlobalStyle`
 
     --error: #fa4c4c;
     --bck-grd: #1b1d1e;
+    --yellow: #CCCC00;
+    --green: #4C9900;
 }
 
 a{

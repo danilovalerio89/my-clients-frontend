@@ -12,16 +12,29 @@ import { FormWrapperSection } from "../../components/FormWrapper/style";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import loginSchema from "../../schemas/login.schema";
+import { myClientsAPI } from "../../services/api";
+import { useHistory } from "react-router-dom";
+import { useUser } from "../../providers/user";
 
-function Login({ newRegister, setNewRegister }) {
+function Login() {
+  const history = useHistory();
+
+  const { setUser } = useUser();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
 
-  function handleSubmitFunction(data) {
-    setNewRegister([data]);
+  async function handleSubmitFunction(data) {
+    await myClientsAPI
+      .post("/login", data)
+      .then((response) => {
+        localStorage.setItem("myClientToken", response.data.token);
+        history.push("/home");
+      })
+      .catch((err) => console.log(err.response.data));
   }
 
   return (
