@@ -28,7 +28,6 @@ export const LabelStyled = styled.label`
   position: absolute;
   display: block;
   background-color: #1b1d1e;
-  /* padding: 4px; */
   color: ${({ valid }) => (valid ? "#335eff" : "#cdcdcd")};
   font-size: 12px;
   left: 10px;
@@ -42,8 +41,8 @@ export const SpanErrorStyled = styled.span`
   width: 100%;
   height: 50%;
   font-size: 10px;
-  background-color: #fa4c4c;
-  color: #fff;
+  background-color: var(--error);
+  color: var(--white);
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,7 +1,46 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+export const MainStyled = styled.main`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bck-grd);
+`;
+
+export const FormWrapperRegister = styled.section`
+  width: 90%;
+  padding: 10px;
+  border: 1px solid var(--white-2);
+  border-radius: 5px;
+
+  @media (min-width: 500px) {
+    padding: 10px 30px;
+    max-width: 500px;
+  }
+
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: var(--fs-600);
+    }
+  }
+`;
+
+export const DivStyled = styled.div`
+  display: flex;
+  margin-bottom: 25px;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    color: var(--clr-500);
+    font-size: var(--fs-500);
+  }
+`;
+
 export const FormStyled = styled.form`
-  width: 360px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,7 +53,7 @@ export const PasswordDivStyled = styled.div`
   display: flex;
   justify-content: space-between;
   div {
-    width: 45%;
+    width: 100%;
   }
 `;
 export const CheckboxDivStyled = styled.div`
@@ -62,18 +101,11 @@ export const SpanError = styled.span`
   text-align: center;
 `;
 
-export const MainStyled = styled.main`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #1b1d1e;
-`;
-
-export const DivStyled = styled.div`
-  display: flex;
-  margin: 30px 0;
-  align-items: center;
-  justify-content: center;
+export const NavLink = styled(Link)`
+  font-size: var(--fs-100);
+  color: var(--clr-500);
+  &:hover {
+    cursor: pointer;
+    color: var(--white);
+  }
 `;

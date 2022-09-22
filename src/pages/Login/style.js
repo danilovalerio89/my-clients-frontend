@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const MainStyled = styled.main`
@@ -61,5 +62,14 @@ export const SpanStyled = styled.span`
   font-size: 12px;
   &:hover {
     cursor: pointer;
+  }
+`;
+
+export const NavLink = styled(Link)`
+  color: var(--clr-500);
+  font-size: var(--fs-100);
+  &:hover {
+    cursor: pointer;
+    color: var(--white);
   }
 `;

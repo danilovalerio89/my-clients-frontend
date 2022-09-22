@@ -6,6 +6,7 @@ import {
   SpanStyled,
   MainStyled,
   DivStyled,
+  NavLink,
 } from "./style";
 import { FormWrapperSection } from "../../components/FormWrapper/style";
 import { useForm } from "react-hook-form";
@@ -50,7 +51,9 @@ function Login({ newRegister, setNewRegister }) {
 
           <ButtonStyled type="submit">Entrar</ButtonStyled>
 
-          <SpanStyled>Ainda não possui cadastro?</SpanStyled>
+          <SpanStyled>
+            <NavLink to="/register">Ainda não possui cadastro?</NavLink>
+          </SpanStyled>
         </FormStyled>
       </FormWrapperSection>
     </MainStyled>

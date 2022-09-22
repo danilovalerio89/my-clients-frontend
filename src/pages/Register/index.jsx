@@ -2,51 +2,24 @@ import Input from "../../components/Input";
 import {
   FormStyled,
   PasswordDivStyled,
-  CheckboxDivStyled,
   ButtonStyled,
   SpanStyled,
-  SpanError,
   MainStyled,
   DivStyled,
+  FormWrapperRegister,
+  NavLink,
 } from "./style";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
+
 import { yupResolver } from "@hookform/resolvers/yup";
+import registerSchema from "../../schemas/register.schema";
 
 function Login({ newRegister, setNewRegister }) {
-  const schema = yup.object().shape({
-    username: yup
-      .string()
-      .required("Username obrigatório")
-      .min(5, "Minimo 5 characters"),
-    name: yup
-      .string()
-      .required("Nome completo obrigatório")
-      .min(5, "Minimo 5 characters")
-      .max(18, "Máximo 18 characters"),
-    email: yup
-      .string()
-      .required("Email obrigatório")
-      .email("Esse email não é válido"),
-    password: yup
-      .string()
-      .required("Password obrigatório")
-      .matches(
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{6,}$/,
-        "Letra minuscula, maiuscula, character especial e numero"
-      ),
-    confirmedEmail: yup.string().oneOf([yup.ref("email")], "Email não confere"),
-    confirmedPassword: yup
-      .string()
-      .oneOf([yup.ref("password")], "Password não confere"),
-    terms: yup.boolean().isTrue("Precisa aceitar os termos"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(registerSchema) });
 
   function handleSubmitFunction(data) {
     setNewRegister([data]);
@@ -54,9 +27,9 @@ function Login({ newRegister, setNewRegister }) {
 
   return (
     <MainStyled>
-      <section>
+      <FormWrapperRegister>
         <DivStyled>
-          <h1>Register</h1>
+          <h1>Cadastro</h1>
         </DivStyled>
         <FormStyled onSubmit={handleSubmit(handleSubmitFunction)}>
           <Input
@@ -93,25 +66,14 @@ function Login({ newRegister, setNewRegister }) {
               register={register}
               errors={errors.password}
             />
-            <Input
-              label={"Confirme sua senha *"}
-              type={"password"}
-              name={"confirmedPassword"}
-              register={register}
-              errors={errors.confirmedPassword}
-            />
           </PasswordDivStyled>
 
-          <CheckboxDivStyled>
-            <input type="checkbox" {...register("terms")} />
-            <span>Eu aceito os termos de uso da aplicação</span>
-            {errors.terms && <SpanError>{errors.terms.message}</SpanError>}
-          </CheckboxDivStyled>
-
-          <ButtonStyled type="submit">Cadastrar</ButtonStyled>
-          <SpanStyled>Já possui uma conta?</SpanStyled>
+          <ButtonStyled type="submit"> Cadastrar</ButtonStyled>
+          <SpanStyled>
+            <NavLink to="/">Já possui uma conta?</NavLink>
+          </SpanStyled>
         </FormStyled>
-      </section>
+      </FormWrapperRegister>
     </MainStyled>
   );
 }
