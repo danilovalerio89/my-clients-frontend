@@ -14,12 +14,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import loginSchema from "../../schemas/login.schema";
 import { myClientsAPI } from "../../services/api";
 import { useHistory } from "react-router-dom";
-import { useUser } from "../../providers/user";
 
 function Login() {
   const history = useHistory();
-
-  const { setUser } = useUser();
 
   const {
     register,

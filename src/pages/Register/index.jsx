@@ -10,19 +10,25 @@ import {
   NavLink,
 } from "./style";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import registerSchema from "../../schemas/register.schema";
+import { myClientsAPI } from "../../services/api";
+import { useHistory } from "react-router-dom";
 
-function Login({ newRegister, setNewRegister }) {
+function Register() {
+  const history = useHistory();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(registerSchema) });
 
-  function handleSubmitFunction(data) {
-    setNewRegister([data]);
+  async function handleSubmitFunction(data) {
+    await myClientsAPI
+      .post("/user", data)
+      .then((response) => history.push("/"))
+      .catch((err) => console.log(err.response.data));
   }
 
   return (
@@ -32,12 +38,6 @@ function Login({ newRegister, setNewRegister }) {
           <h1>Cadastro</h1>
         </DivStyled>
         <FormStyled onSubmit={handleSubmit(handleSubmitFunction)}>
-          <Input
-            label={"Nome de usuário *"}
-            name={"username"}
-            register={register}
-            errors={errors.username}
-          />
           <Input
             label={"Nome completo *"}
             name={"name"}
@@ -51,13 +51,7 @@ function Login({ newRegister, setNewRegister }) {
             register={register}
             errors={errors.email}
           />
-          <Input
-            label={"Confirme seu Email *"}
-            type={"email"}
-            name={"confirmedEmail"}
-            register={register}
-            errors={errors.confirmedEmail}
-          />
+
           <PasswordDivStyled>
             <Input
               label={"Senha *"}
@@ -78,4 +72,4 @@ function Login({ newRegister, setNewRegister }) {
   );
 }
 
-export default Login;
+export default Register;
