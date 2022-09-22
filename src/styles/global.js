@@ -9,13 +9,13 @@ export default createGlobalStyle`
     }
 :root{
        
-    --Black-2: #111111;
-    --Black-1: #57595E;
-    --Black : #000000; 
+    --black-2: #111111;
+    --black-1: #57595E;
+    --black : #000000; 
 
-    --White-2: #e5e5e5;
-    --White-1: #f5f5f5;
-    --White : #FFFFFF;
+    --white-2: #e5e5e5;
+    --white-1: #f5f5f5;
+    --white : #FFFFFF;
 
     --fs-100: 1rem;
     --fs-200: 1.25rem;
@@ -30,7 +30,10 @@ export default createGlobalStyle`
     --clr-200: #0F0F33;
     --clr-300: #000052;
     --clr-400: #181852;
-    --clr-500: #00009E;
+    --clr-500: #335eff;
+
+    --error: #fa4c4c;
+    --bck-grd: #1b1d1e;
 }
 
 a{
