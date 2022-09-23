@@ -3,8 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormStyled, DivStyled, DivButtons } from "./style";
 import Input from "../Input";
 import contactSchema from "../../schemas/contact.schema";
+import { myClientsAPI } from "../../services/api";
+import { useUser } from "../../providers/user";
 
-function ModalContact({ setModalContato, id_client }) {
+function ModalContact({ setModalContato, id_client, attClients, setAllFalse }) {
+  const { user } = useUser();
   const {
     register,
     handleSubmit,
@@ -16,9 +19,19 @@ function ModalContact({ setModalContato, id_client }) {
       (acc, [key, value]) => (value == "" ? acc : ((acc[key] = value), acc)),
       {}
     );
-
-    console.log(newData);
+    await myClientsAPI
+      .post(`/clients/${id_client}/contacts`, newData, {
+        headers: {
+          "Authorization": `Token ${user.token}`,
+        },
+      })
+      .then((response) => {
+        attClients();
+        setAllFalse();
+      })
+      .catch((err) => console.log(err.response));
   }
+
   return (
     <>
       <DivStyled>
@@ -44,10 +57,7 @@ function ModalContact({ setModalContato, id_client }) {
           errors={errors.phone}
         />
         <DivButtons>
-          <button type="submit" onClick={() => console.log("Adicionar")}>
-            Adicionar
-          </button>
-          <button onClick={() => setModalContato(false)}>Voltar</button>
+          <button type="submit">Adicionar</button>
         </DivButtons>
       </FormStyled>
     </>

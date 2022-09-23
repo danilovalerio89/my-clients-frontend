@@ -12,7 +12,7 @@ export const FormStyled = styled.form`
 export const DivStyled = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   h1 {
     color: var(--white);
   }
@@ -21,9 +21,10 @@ export const DivStyled = styled.div`
 export const DivButtons = styled.div`
   display: flex;
   justify-content: space-around;
+
   button {
     border-radius: 5px;
     padding: 5px;
-    width: 70px;
+    width: 100%;
   }
 `;

@@ -24,6 +24,6 @@ export const DivButtons = styled.div`
   button {
     border-radius: 5px;
     padding: 5px;
-    width: 70px;
+    width: 100%;
   }
 `;

@@ -1,14 +1,12 @@
-function Contacts() {
+import { SectionContacts } from "./style";
+
+function Contacts({ name, email, phone }) {
   return (
-    <section>
-      <h1>Nome: Do Cliente</h1>
-      <p>Telefone: Do CLiente</p>
-      <p>Email: Do Cliente</p>
-      <div>
-        <button>Editar Contato</button>
-        <button>Excluir Contato</button>
-      </div>
-    </section>
+    <SectionContacts>
+      <h1>Nome: {name}</h1>
+      <p>Email: {email}</p>
+      <p>Telefone: {phone}</p>
+    </SectionContacts>
   );
 }
 export default Contacts;

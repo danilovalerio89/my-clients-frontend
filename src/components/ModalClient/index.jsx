@@ -3,8 +3,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import attClientSchema from "../../schemas/attClient.schema";
 import { FormStyled, DivStyled, DivButtons } from "./style";
 import Input from "../Input";
+import { useUser } from "../../providers/user";
+import { myClientsAPI } from "../../services/api";
 
-function ModalAttClient({ setModalAttClient, id_client }) {
+function ModalAttClient({
+  setModalAttClient,
+  id_client,
+  attClients,
+  setAllFalse,
+}) {
+  const { user } = useUser();
+
   const {
     register,
     handleSubmit,
@@ -17,12 +26,22 @@ function ModalAttClient({ setModalAttClient, id_client }) {
       {}
     );
 
-    console.log(newData);
+    await myClientsAPI
+      .patch(`/clients/${id_client}`, newData, {
+        headers: {
+          "Authorization": `Token ${user.token}`,
+        },
+      })
+      .then((response) => {
+        attClients();
+        setAllFalse();
+      })
+      .catch((err) => console.log(err.response));
   }
   return (
     <>
       <DivStyled>
-        <h1>ATUALIZAR CLIENTE</h1>
+        <h1>Atualizar Cliente</h1>
       </DivStyled>
       <FormStyled onSubmit={handleSubmit(handleSubmitFunction)}>
         <Input
@@ -44,10 +63,7 @@ function ModalAttClient({ setModalAttClient, id_client }) {
           errors={errors.phone}
         />
         <DivButtons>
-          <button type="submit" onClick={() => console.log("Att")}>
-            Atualizar
-          </button>
-          <button onClick={() => setModalAttClient(false)}>Voltar</button>
+          <button type="submit">Atualizar</button>
         </DivButtons>
       </FormStyled>
     </>
