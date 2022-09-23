@@ -8,4 +8,4 @@ https://github.com/danilovalerio89/my-clients-backend
 
 E seguir as intruções.
 
-#Com a API configurada e rodando, deve utilizar o comendo "yarn dev" no terminal.
+#Com a API configurada e rodando, deve utilizar o comendo "yarn" e o comando "yarn dev" no terminal.
