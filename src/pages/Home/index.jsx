@@ -7,6 +7,7 @@ import {
   NavStyled,
   SectionWrapper,
   ButtonNav,
+  TitleNoClients,
 } from "./style";
 import { useUser } from "../../providers/user";
 import { myClientsAPI } from "../../services/api";
@@ -87,11 +88,15 @@ function Home() {
                 phone={client.phone}
                 email={client.email}
                 id_client={client.id}
+                contacts={client.contacts}
                 attClients={attClients}
               />
             ))
           ) : (
-            <h1>Não tem cliente</h1>
+            <>
+              <TitleNoClients>Você ainda não possui clientes</TitleNoClients>
+              <Client attClients={attClients} />
+            </>
           )}
         </SectionWrapper>
       ) : (

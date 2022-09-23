@@ -14,6 +14,7 @@ export const DivStyled = styled.header`
   justify-content: center;
   align-items: center;
   justify-content: flex-start;
+  border-bottom: 1px solid var(--white);
 `;
 
 export const DivImg = styled.div`
@@ -46,7 +47,7 @@ export const ButtonNav = styled.button`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  border: 1px solid var(--white);
+  border: 1px solid var(--black);
   padding: 5px;
   width: 111px;
   border-radius: 5px;
@@ -55,4 +56,7 @@ export const ButtonNav = styled.button`
     border: 1px solid var(--black-1);
     color: var(--black-2);
   }
+`;
+export const TitleNoClients = styled.h1`
+  color: var(--white);
 `;

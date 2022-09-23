@@ -1,0 +1,57 @@
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import attClientSchema from "../../schemas/attClient.schema";
+import { FormStyled, DivStyled, DivButtons } from "./style";
+import Input from "../Input";
+
+function ModalAttClient({ setModalAttClient, id_client }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(attClientSchema) });
+
+  async function handleSubmitFunction(data) {
+    let newData = Object.entries(data).reduce(
+      (acc, [key, value]) => (value == "" ? acc : ((acc[key] = value), acc)),
+      {}
+    );
+
+    console.log(newData);
+  }
+  return (
+    <>
+      <DivStyled>
+        <h1>ATUALIZAR CLIENTE</h1>
+      </DivStyled>
+      <FormStyled onSubmit={handleSubmit(handleSubmitFunction)}>
+        <Input
+          label={"Nome"}
+          name={"name"}
+          register={register}
+          errors={errors.name}
+        />
+        <Input
+          label={"Email"}
+          name={"email"}
+          register={register}
+          errors={errors.email}
+        />
+        <Input
+          label={"Telefone"}
+          name={"phone"}
+          register={register}
+          errors={errors.phone}
+        />
+        <DivButtons>
+          <button type="submit" onClick={() => console.log("Att")}>
+            Atualizar
+          </button>
+          <button onClick={() => setModalAttClient(false)}>Voltar</button>
+        </DivButtons>
+      </FormStyled>
+    </>
+  );
+}
+
+export default ModalAttClient;

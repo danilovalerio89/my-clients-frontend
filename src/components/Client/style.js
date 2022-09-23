@@ -5,8 +5,9 @@ export const MainStyled = styled.main`
   width: 100%;
   height: 100vh;
   display: flex;
+  margin-top: 25px;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: var(--bck-grd);
 `;
 
