@@ -1,11 +1,28 @@
-#SIMULADO TESTE TÉCNICO - KENZIE ACADEMY
+### <h1 align="center">My Clients Front</h1>
 
-#Trabalho Utilizando React e Styled-Components
+<p align="center">Pequena Aplicação para fins de estudos, demonstrando um pouco do conhecimento full stack. 
+</p>
 
-#Para iniciar a API deve estar rorando - Para iniciar a API deve clonar o repositorio:
+---
 
-https://github.com/danilovalerio89/my-clients-backend
+Para utilizar o My Clients Front você precisará:
 
-E seguir as intruções.
+## Clonar o repositorio
 
-#Com a API configurada e rodando, deve utilizar o comendo "yarn" e o comando "yarn dev" no terminal.
+## Git clone
+
+    git clone <link abaixo>
+
+<a href="https://github.com/danilovalerio89/my-clients-frontend"> GIT HUB </a>
+
+Após o clone do repositório sera necessario seguir os seguintes passos:
+
+## Install
+
+    yarn install
+
+## API
+
+<a href="https://github.com/danilovalerio89/my-clients-backend"> GIT HUB </a>
+
+    Siga os passos do README da Api para inicializar.

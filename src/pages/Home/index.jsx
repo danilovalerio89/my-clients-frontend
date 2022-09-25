@@ -1,108 +1,229 @@
-import { useEffect, useState } from "react";
-import MyClients from "../../components/MyClient";
 import {
-  MainStyled,
-  DivStyled,
-  DivImg,
-  NavStyled,
-  SectionWrapper,
-  ButtonNav,
-  TitleNoClients,
-} from "./style";
-import { useUser } from "../../providers/user";
-import { myClientsAPI } from "../../services/api";
-import { HiUser, HiUsers, HiUserAdd, HiLogout } from "react-icons/hi";
+  Avatar,
+  AvatarGroup,
+  Box,
+  Text,
+  Flex,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Stack,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Client from "../../components/Client";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import ContactCard from "../../components/CardContact";
+import CreateContact from "../../components/CreateContact";
+import { useUser } from "../../providers/user";
+import { api } from "../../services/api";
+import contactSchema from "../../schemas/contact.schema";
 
 function Home() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
-  const [clients, setClients] = useState([]);
-  const [myClients, setMyClients] = useState(true);
-  const [editClient, setEditClient] = useState(false);
+
   const { user, setUser } = useUser();
+  const [contacts, setContacts] = useState();
+  const [editUser, setEditUser] = useState(false);
+
+  const [addContact, setAddContact] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(contactSchema) });
 
   useEffect(() => {
-    let myToken = localStorage.getItem("myClientToken");
-    setUser({ token: myToken });
+    let token = localStorage.getItem("userToken");
+    setUser({ token: token });
   }, []);
 
+  const logOut = () => {
+    localStorage.clear();
+    history.push("/");
+  };
+
   useEffect(() => {
-    getClients();
+    getContacts();
   }, [user]);
 
-  async function getClients() {
+  const attContacts = () => {
+    setAddContact(false);
+    getContacts();
+  };
+
+  const getContacts = async () => {
     if (user.token) {
-      await myClientsAPI
-        .get("/clients", {
+      await api
+        .get("/user/profile", {
           headers: {
             "Authorization": `Token ${user.token}`,
           },
         })
-        .then((response) => setClients(response.data))
+        .then((response) => setContacts(response.data[0]))
         .catch((err) => console.log(err));
     }
-  }
+  };
 
-  function logout() {
-    localStorage.clear();
-    history.push("/");
-  }
+  const handleSubmitFunction = async (data) => {
+    let newData = Object.entries(data).reduce(
+      (acc, [key, value]) => (value == "" ? acc : ((acc[key] = value), acc)),
+      {}
+    );
 
-  function attClients() {
-    setEditClient(false);
-    setMyClients(true);
-    getClients();
-  }
+    api
+      .patch(`/user/${contacts.id}`, newData, {
+        headers: {
+          "Authorization": `Token ${user.token}`,
+        },
+      })
+      .then((response) => {
+        attContacts();
+        getContacts();
+      })
+      .catch((err) => console.log(err.response.data));
+  };
+
+  const deleteUser = async () => {
+    api
+      .delete(`/user/${contacts.id}`, {
+        headers: {
+          "Authorization": `Token ${user.token}`,
+        },
+      })
+      .then((response) => {
+        onClose();
+        logOut();
+      })
+      .catch((err) => console.log(err.response.data));
+  };
 
   return (
-    <MainStyled>
-      <DivStyled>
-        <DivImg>
-          <HiUser size={60}></HiUser>
-        </DivImg>
-        <NavStyled>
-          <ButtonNav onClick={() => attClients()}>
-            <HiUsers size={15} />
-            Meus Clientes
-          </ButtonNav>
+    <>
+      <Flex backgroundColor={"blue.100"} align={"center"}>
+        <AvatarGroup
+          spacing="1rem"
+          padding={5}
+          onClick={onOpen}
+          cursor={"pointer"}
+        >
+          <Avatar bg="teal.500" />
+        </AvatarGroup>
+        <Flex flexGrow={1} align={"center"} justify={"space-around"}>
+          <Text marginLeft={25}>{contacts?.name}</Text>
+          <Text marginLeft={25}>{contacts?.email}</Text>
+          <Button onClick={() => logOut()}>Sair</Button>
+        </Flex>
+      </Flex>
 
-          <ButtonNav onClick={() => setMyClients(false)}>
-            <HiUserAdd size={15} />
-            Adicionar
-          </ButtonNav>
-          <ButtonNav onClick={() => logout()}>
-            <HiLogout size={15} />
-            Sair
-          </ButtonNav>
-        </NavStyled>
-      </DivStyled>
-
-      {myClients ? (
-        <SectionWrapper>
-          {clients.length > 0 ? (
-            clients.map((client) => (
-              <MyClients
-                key={client.id}
-                name={client.name}
-                phone={client.phone}
-                email={client.email}
-                id_client={client.id}
-                contacts={client.contacts}
-                attClients={attClients}
+      <Flex justify={"space-evenly"} padding={5} backgroundColor={"blue.50"}>
+        <Button
+          backgroundColor={"blue.600"}
+          color={"blackAlpha.900"}
+          onClick={() => attContacts()}
+        >
+          Meus Contatos
+        </Button>
+        <Button
+          backgroundColor={"green.600"}
+          color={"blackAlpha.900"}
+          onClick={() => setAddContact(true)}
+        >
+          Adicionar Contato
+        </Button>
+      </Flex>
+      {addContact ? (
+        <CreateContact attContacts={attContacts} />
+      ) : (
+        <Flex justify={"space-evenly"}>
+          {contacts?.contacts.length == 0 ? (
+            <Text>Você ainda não possui contatos</Text>
+          ) : (
+            contacts?.contacts.map((contact) => (
+              <ContactCard
+                key={contact.id}
+                firstName={contact.firstName}
+                lastName={contact.lastName}
+                email={contact.email}
+                phone={contact.phone}
+                id={contact.id}
+                attContacts={attContacts}
               />
             ))
-          ) : (
-            <>
-              <TitleNoClients>Você ainda não possui clientes</TitleNoClients>
-              <Client attClients={attClients} />
-            </>
           )}
-        </SectionWrapper>
-      ) : (
-        <Client attClients={attClients} />
+        </Flex>
       )}
-    </MainStyled>
+      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <form onSubmit={handleSubmit(handleSubmitFunction)}>
+              <Flex marginBottom={4} justify={"center"}>
+                <Text fontSize={30} color={"blue.600"}>
+                  Editar Usuário
+                </Text>
+              </Flex>
+              <Stack spacing={4}>
+                <FormControl>
+                  <FormLabel color={"blackAlpha.700"}>Name</FormLabel>
+                  <Input
+                    variant="filled"
+                    placeholder="Name"
+                    {...register("name")}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel color={"blackAlpha.700"}>Email</FormLabel>
+                  <Input
+                    variant="filled"
+                    placeholder="Email"
+                    {...register("email")}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel color={"blackAlpha.700"}>Password</FormLabel>
+                  <InputGroup size="md" marginBottom={5}>
+                    <Input
+                      variant="filled"
+                      pr="4.5rem"
+                      type={"password"}
+                      placeholder="Enter password"
+                      {...register("password")}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </Stack>
+              <ModalFooter justifyContent={"space-between"}>
+                <Button background={"red.500"} onClick={() => deleteUser()}>
+                  Excluir Usuário
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  type="submit"
+                  onClick={onClose}
+                >
+                  Salvar
+                </Button>
+                <Button onClick={onClose}>Voltar</Button>
+              </ModalFooter>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 
