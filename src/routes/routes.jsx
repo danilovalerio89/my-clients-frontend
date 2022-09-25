@@ -2,7 +2,7 @@ import { Route as ReactDOMRoute, Redirect } from "react-router-dom";
 
 const Route = ({ isPrivate = false, component: Component, ...rest }) => {
   function getToken() {
-    const token = localStorage.getItem("myClientToken");
+    const token = localStorage.getItem("userToken");
 
     if (token) {
       return true;

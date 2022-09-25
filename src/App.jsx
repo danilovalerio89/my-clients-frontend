@@ -1,12 +1,11 @@
+import { Box } from "@chakra-ui/react";
 import Routes from "./routes";
-import GlobalStyles from "./styles/global";
 
 function App() {
   return (
-    <>
-      <GlobalStyles />
+    <Box>
       <Routes />
-    </>
+    </Box>
   );
 }
 
